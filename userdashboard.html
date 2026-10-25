@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Referral Links | Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #ff6b00;
+            --primary-hover: #e66000;
+            --primary-light: #fff0e6;
+            --bg-body: #f4f7f9;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --text-light: #9ca3af;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --grad-blue: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+            --grad-green: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            --grad-red: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-md: 0 10px 25px rgba(0,0,0,0.06);
+            --shadow-lg: 0 20px 40px rgba(0,0,0,0.08);
+            --shadow-glow: 0 0 20px rgba(255, 107, 0, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        body { 
+            background-color: var(--bg-body); 
+            background-image: radial-gradient(at 0% 0%, hsla(30,100%,96%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(210,100%,96%,1) 0, transparent 50%);
+            color: var(--text-main); 
+            display: flex; 
+            min-height: 100vh; 
+        }
+
+        /* --- TOAST NOTIFICATION --- */
+        #toast-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            padding: 14px 24px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            animation: slideDown 0.3s ease forwards;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 250px;
+            justify-content: center;
+        }
+        .toast.success { background: #10b981; }
+        .toast.error { background: #ef4444; }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar { width: 280px; background: #ffffff; border-right: 1px solid rgba(0,0,0,0.03); display: flex; flex-direction: column; padding: 32px 24px; position: fixed; height: 100vh; box-shadow: var(--shadow-sm); z-index: 10; }
+        .user-profile { display: flex; align-items: center; gap: 14px; margin-bottom: 40px; padding-bottom: 24px; border-bottom: 1px solid #f3f4f6; }
+        .user-avatar { width: 52px; height: 52px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800; color: var(--primary); background: var(--primary-light); box-shadow: inset 0 0 0 2px #fff, 0 4px 10px rgba(255,107,0,0.15); }
+        .user-info h3 { font-size: 15px; font-weight: 700; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px; }
+        .user-info p { font-size: 12px; color: var(--text-muted); font-weight: 500; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px; }
+        .status-badge { display: inline-flex; align-items: center; gap: 5px; background: #dcfce7; color: #166534; padding: 3px 8px; border-radius: 20px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .status-badge::before { content: ''; width: 6px; height: 6px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 0 2px #bbf7d0; }
+        .nav-menu { list-style: none; display: flex; flex-direction: column; gap: 8px; flex-grow: 1; }
+        .nav-item a { display: flex; align-items: center; gap: 14px; padding: 14px 18px; text-decoration: none; color: var(--text-muted); font-size: 14px; font-weight: 600; border-radius: 12px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
+        .nav-item.active a { background: var(--primary-light); color: var(--primary); box-shadow: inset 4px 0 0 var(--primary); }
+        .nav-item a:hover:not(.active a) { background: #f9fafb; color: var(--text-main); transform: translateX(4px); }
+        .nav-item a i { font-size: 18px; width: 20px; text-align: center; }
+        .sidebar-cta { background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%); padding: 24px; border-radius: 16px; margin-top: 24px; border: 1px solid #fed7aa; position: relative; overflow: hidden; }
+        .sidebar-cta::before { content: ''; position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: rgba(255, 107, 0, 0.1); border-radius: 50%; }
+        .sidebar-cta h4 { font-size: 14px; font-weight: 800; margin-bottom: 8px; line-height: 1.4; color: #7c2d12; }
+        .sidebar-cta p { font-size: 12px; color: #9a3412; margin-bottom: 16px; line-height: 1.5; font-weight: 500; }
+        .btn-primary { background: var(--primary); color: white; border: none; padding: 12px 16px; border-radius: 10px; font-size: 13px; font-weight: 700; width: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(255, 107, 0, 0.25); }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(255, 107, 0, 0.35); }
+
+        /* --- MAIN CONTENT --- */
+        .main-content { flex-grow: 1; margin-left: 280px; padding: 40px 48px; }
+        .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        .brand { display: flex; align-items: center; gap: 14px; }
+        .brand-icon { background: var(--primary); color: white; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: var(--shadow-glow); }
+        .brand-text h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+        .brand-text p { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+        .header-actions { display: flex; align-items: center; gap: 20px; }
+        .notification-btn { background: white; border: none; width: 44px; height: 44px; border-radius: 50%; color: var(--text-muted); cursor: pointer; box-shadow: var(--shadow-sm); transition: all 0.2s; }
+        .notification-btn:hover { color: var(--primary); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+        .user-dropdown { display: flex; align-items: center; gap: 12px; background: white; padding: 8px 16px 8px 12px; border-radius: 30px; box-shadow: var(--shadow-sm); font-size: 13px; font-weight: 700; cursor: pointer; }
+        .user-dropdown span { font-size: 11px; color: var(--text-muted); font-weight: 500; display: block; }
+        .user-dropdown div { display: flex; flex-direction: column; }
+
+        /* --- STATS --- */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 40px; }
+        .stat-card { padding: 28px; border-radius: 20px; display: flex; align-items: center; gap: 20px; position: relative; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: var(--shadow-sm); border: 1px solid rgba(255,255,255,0.5); }
+        .stat-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+        .stat-card.blue { background: var(--grad-blue); }
+        .stat-card.green { background: var(--grad-green); }
+        .stat-card.red { background: var(--grad-red); }
+        .stat-icon { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; flex-shrink: 0; position: relative; z-index: 2; box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
+        .stat-card.blue .stat-icon { background: #3b82f6; }
+        .stat-card.green .stat-icon { background: #10b981; }
+        .stat-card.red .stat-icon { background: #ef4444; }
+        .stat-details { position: relative; z-index: 2; }
+        .stat-details h3 { font-size: 14px; font-weight: 700; color: #374151; margin-bottom: 4px; }
+        .stat-details .number { font-size: 32px; font-weight: 800; color: #111827; margin-bottom: 2px; letter-spacing: -1px; }
+        .stat-details p { font-size: 12px; color: #4b5563; font-weight: 500; }
+
+        /* --- LAYOUT --- */
+        .content-layout { display: grid; grid-template-columns: 1.4fr 1fr; gap: 32px; align-items: start; }
+        .section-header { margin-bottom: 20px; }
+        .section-title { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 800; color: #111827; }
+        .section-title i { color: #10b981; font-size: 20px; background: #d1fae5; padding: 8px; border-radius: 10px; }
+        .section-subtitle { font-size: 13px; color: var(--text-muted); font-weight: 500; margin-top: 4px; margin-left: 44px; }
+        .links-list { display: flex; flex-direction: column; gap: 16px; }
+        .link-item { background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.8); border-radius: 16px; padding: 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow-sm); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .link-item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); background: #fff; border-color: #e5e7eb; }
+        .link-info { display: flex; align-items: center; gap: 16px; }
+        .company-logo { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: white; font-weight: 800; background: linear-gradient(135deg, #3b82f6, #2563eb); box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3); }
+        .link-text h4 { font-size: 15px; font-weight: 700; color: #111827; margin-bottom: 4px; }
+        .link-text p { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+        .link-action { display: flex; align-items: center; gap: 16px; }
+        .bonus-tag { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 700; }
+        .link-action a { color: white; background: #111827; text-decoration: none; font-size: 13px; font-weight: 600; padding: 10px 16px; border-radius: 8px; display: flex; align-items: center; gap: 8px; transition: background 0.2s; }
+        .link-action a:hover { background: #374151; }
+        .empty-state { text-align: center; padding: 50px 20px; color: var(--text-muted); background: var(--card-bg); border: 1px dashed #d1d5db; border-radius: 16px; }
+        .empty-state i { font-size: 40px; color: #d1d5db; margin-bottom: 16px; }
+
+        /* --- FORM --- */
+        .form-card { background: #ffffff; border-radius: 24px; padding: 32px; box-shadow: var(--shadow-lg); border: 1px solid #f3f4f6; position: sticky; top: 40px; }
+        .form-header { margin-bottom: 28px; }
+        .form-title { display: flex; align-items: center; gap: 14px; font-size: 20px; font-weight: 800; color: #111827; }
+        .form-title .icon { background: var(--primary); color: white; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 12px; font-size: 16px; box-shadow: var(--shadow-glow); }
+        .form-subtitle { font-size: 13px; color: var(--text-muted); margin-top: 8px; font-weight: 500; }
+        .form-group { margin-bottom: 20px; position: relative; }
+        .form-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px; color: #374151; }
+        .input-wrapper { position: relative; }
+        .input-wrapper i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 16px; }
+        .input-wrapper input { width: 100%; padding: 14px 16px 14px 44px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 14px; font-weight: 500; outline: none; transition: all 0.3s ease; background: #f9fafb; color: #111827; }
+        .input-wrapper input:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px var(--primary-light); }
+        .btn-submit { width: 100%; background: #111827; color: white; border: none; padding: 16px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 10px; transition: all 0.3s ease; }
+        .btn-submit:hover { background: #1f2937; transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .btn-submit:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1200px) {
+            .content-layout { grid-template-columns: 1fr; }
+            .form-card { position: relative; top: 0; }
+        }
+        @media (max-width: 900px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .sidebar { transform: translateX(-100%); transition: transform 0.3s; }
+            .main-content { margin-left: 0; padding: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="toast-container"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="user-profile">
+            <div class="user-avatar" id="avatar-initial">U</div>
+            <div class="user-info">
+                <h3 id="sidebar-username">Loading...</h3>
+                <p id="sidebar-email">...</p>
+                <div class="status-badge">Online</div>
+            </div>
+        </div>
+
+        <ul class="nav-menu">
+            <li class="nav-item active"><a><i class="fa-solid fa-border-all"></i> Overview</a></li>
+            <li class="nav-item"><a href="#form-card"><i class="fa-solid fa-cloud-arrow-up"></i> Submit Link</a></li>
+            <li class="nav-item" onclick="logout()" style="margin-top: auto;"><a><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</a></li>
+        </ul>
+
+        <div class="sidebar-cta">
+            <h4>Ready to earn?</h4>
+            <p>Submit your referral link and get it approved by our team.</p>
+            <button class="btn-primary" onclick="document.getElementById('form-card').scrollIntoView({behavior: 'smooth'})"><i class="fa-solid fa-plus"></i> New Submission</button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="top-header">
+            <div class="brand">
+                <div class="brand-icon"><i class="fa-solid fa-link"></i></div>
+                <div class="brand-text">
+                    <h1>Referral Hub</h1>
+                    <p>Manage your links & rewards</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="notification-btn"><i class="fa-regular fa-bell"></i></button>
+                <div class="user-dropdown">
+                    <div>
+                        <span>Welcome back</span>
+                        <strong id="topbar-username">Loading...</strong>
+                    </div>
+                    <i class="fa-solid fa-chevron-down" style="font-size: 12px; color: #9ca3af; margin-left: 8px;"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Live Stats -->
+        <div class="stats-grid">
+            <div class="stat-card blue">
+                <div class="stat-icon"><i class="fa-solid fa-paper-plane"></i></div>
+                <div class="stat-details">
+                    <h3>Total Submitted</h3>
+                    <div class="number" id="total-count">0</div>
+                    <p>All time submissions</p>
+                </div>
+            </div>
+            <div class="stat-card green">
+                <div class="stat-icon"><i class="fa-solid fa-circle-check"></i></div>
+                <div class="stat-details">
+                    <h3>Approved Links</h3>
+                    <div class="number" id="approved-count">0</div>
+                    <p>Currently live</p>
+                </div>
+            </div>
+            <div class="stat-card red">
+                <div class="stat-icon"><i class="fa-solid fa-circle-xmark"></i></div>
+                <div class="stat-details">
+                    <h3>Declined Links</h3>
+                    <div class="number" id="declined-count">0</div>
+                    <p>Needs revision</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-layout">
+            <!-- Dynamic Verified Links -->
+            <div class="links-section">
+                <div class="section-header">
+                    <div class="section-title"><i class="fa-solid fa-shield-check"></i> Verified Referral Links</div>
+                    <div class="section-subtitle">These links have been verified by admin and are ready to share with your network.</div>
+                </div>
+
+                <div class="links-list" id="verified-links-container">
+                    <!-- Populated dynamically via JavaScript -->
+                </div>
+            </div>
+
+            <!-- Submit Link Form -->
+            <div class="form-section" id="form-card">
+                <div class="form-card">
+                    <div class="form-header">
+                        <div class="form-title"><div class="icon"><i class="fa-solid fa-plus"></i></div> Submit New Link</div>
+                        <div class="form-subtitle">Fill out the details below. Our team will review it shortly.</div>
+                    </div>
+
+                    <form id="submit-link-form">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <div class="input-wrapper">
+                                <i class="fa-regular fa-user"></i>
+                                <input type="text" id="input-name" placeholder="Enter your name" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <div class="input-wrapper">
+                                <i class="fa-regular fa-envelope"></i>
+                                <input type="email" id="input-email" placeholder="Enter your email" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Platform / Program</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-building"></i>
+                                <input type="text" id="input-program" placeholder="e.g. Betika, Jumia" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Referral Link</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-link"></i>
+                                <input type="url" id="input-link" placeholder="https://..." required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Bonus / Reward</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-gift"></i>
+                                <input type="text" id="input-bonus" placeholder="e.g. 500 KES">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-submit" id="submit-btn">
+                            <i class="fa-solid fa-paper-plane"></i> <span id="btn-text">Submit for Review</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Initialize Supabase
+        const supabase = supabase.createClient('https://xjurhkyheyuqjfidqsxj.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqdXJoa3loZXl1cWpmaWRxc3hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzMTEyOTIsImV4cCI6MjEwNzg4NzI5Mn0.8l8OEqN9SCq0shZhk1IWEyoPmwJGQRIMYCQPhXmof6g');
+        
+        let currentUser = null;
+        let userAccountId = null; // Store the account ID from the accounts table
+
+        // Custom Toast Notification System
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const icon = type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation';
+            toast.innerHTML = `<i class="fa-solid ${icon}"></i> ${message}`;
+            
+            container.appendChild(toast);
+            
+            // Remove after 4 seconds
+            setTimeout(() => {
+                toast.style.animation = 'slideDown 0.3s ease reverse forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        // 1. CHECK AUTH & LOAD USER DATA
+        async function checkAuth() {
+            try {
+                const { data: { session }, error } = await supabase.auth.getSession();
+                
+                if (error || !session) {
+                    window.location.href = 'sigin-up.html';
+                    return;
+                }
+                
+                currentUser = session.user;
+                const username = currentUser.user_metadata?.username || currentUser.email.split('@')[0];
+                
+                // Populate User Details
+                document.getElementById('sidebar-username').textContent = username;
+                document.getElementById('sidebar-email').textContent = currentUser.email;
+                document.getElementById('topbar-username').textContent = username;
+                document.getElementById('avatar-initial').textContent = username.charAt(0).toUpperCase();
+                
+                // Pre-fill Form fields
+                document.getElementById('input-name').value = username;
+                document.getElementById('input-email').value = currentUser.email;
+
+                // Fetch the account_id from the accounts table so we can link the submission
+                const { data: accountData } = await supabase
+                    .from('accounts')
+                    .select('id')
+                    .eq('email', currentUser.email)
+                    .maybeSingle();
+
+                if (accountData) {
+                    userAccountId = accountData.id;
+                }
+
+                // Load Dashboard Data
+                loadDashboardData();
+
+            } catch (err) {
+                console.error("Auth Error:", err);
+                showToast("Authentication error. Please log in again.", "error");
+            }
+        }
+
+        // 2. FETCH DATA (Stats & Verified Links)
+        async function loadDashboardData() {
+            if (!currentUser) return;
+
+            try {
+                // Fetch user's personal stats
+                const { data: statsData } = await supabase
+                    .from('links')
+                    .select('status')
+                    .eq('email', currentUser.email);
+
+                if (statsData) {
+                    document.getElementById('total-count').innerText = statsData.length;
+                    document.getElementById('approved-count').innerText = statsData.filter(i => i.status === 'Approved').length;
+                    document.getElementById('declined-count').innerText = statsData.filter(i => i.status === 'Declined').length;
+                }
+
+                // Fetch Universal Verified Links (All approved links)
+                const { data: verified, error } = await supabase
+                    .from('links')
+                    .select('*')
+                    .eq('status', 'Approved')
+                    .order('submitted_at', { ascending: false });
+
+                if (error) throw error;
+
+                const container = document.getElementById('verified-links-container');
+                
+                if (!verified || verified.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fa-solid fa-link-slash"></i>
+                            <p style="font-weight: 600; font-size: 15px; margin-bottom: 4px;">No verified links yet</p>
+                            <p>Check back later when the admin approves more submissions.</p>
+                        </div>`;
+                } else {
+                    container.innerHTML = verified.map(link => `
+                        <div class="link-item">
+                            <div class="link-info">
+                                <div class="company-logo">${link.program.charAt(0).toUpperCase()}</div>
+                                <div class="link-text">
+                                    <h4>${link.program}</h4>
+                                    <p>${link.title || 'Referral Link'}</p>
+                                </div>
+                            </div>
+                            <div class="link-action">
+                                ${link.bonus ? `<span class="bonus-tag">Bonus: ${link.bonus}</span>` : ''}
+                                <a href="${link.url}" target="_blank">Visit <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:11px;"></i></a>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error.message);
+            }
+        }
+
+        // 3. SUBMIT LINK
+        document.getElementById('submit-link-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!currentUser) {
+                showToast("You must be logged in to submit a link.", "error");
+                return;
+            }
+
+            const btn = document.getElementById('submit-btn');
+            const btnText = document.getElementById('btn-text');
+            
+            btn.disabled = true;
+            btnText.innerText = "Submitting...";
+
+            const program = document.getElementById('input-program').value;
+            const link = document.getElementById('input-link').value;
+            const bonus = document.getElementById('input-bonus').value;
+
+            try {
+                // Insert INCLUDING account_id to satisfy the database constraints
+                const { error } = await supabase
+                    .from('links')
+                    .insert([{ 
+                        account_id: userAccountId, // <-- Linking the user here
+                        username: document.getElementById('input-name').value,
+                        email: document.getElementById('input-email').value,
+                        program: program,
+                        title: `${program} Referral`, 
+                        url: link, 
+                        bonus: bonus,
+                        status: 'Pending' 
+                    }]);
+
+                if (error) {
+                    showToast("Database Error: " + error.message, "error");
+                    throw error;
+                }
+
+                showToast("Link submitted successfully! Pending review.", "success");
+                
+                // Clear specific fields but keep name/email
+                document.getElementById('input-program').value = '';
+                document.getElementById('input-link').value = '';
+                document.getElementById('input-bonus').value = '';
+                
+                // Reload stats instantly
+                loadDashboardData();
+
+            } catch (error) {
+                console.error("Submission failed:", error);
+            } finally {
+                btn.disabled = false;
+                btnText.innerText = "Submit for Review";
+            }
+        });
+
+        // 4. LOGOUT
+        async function logout() {
+            await supabase.auth.signOut();
+            window.location.href = 'sigin-up.html';
+        }
+
+        // Wait a brief moment before checking auth to ensure mobile browsers have loaded the session
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(checkAuth, 400); 
+        });
+    </script>
+</body>
+</html>
