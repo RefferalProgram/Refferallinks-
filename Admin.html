@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Referral Links | Admin Dashboard</title>
+<style>
+:root{--orange:#ff6b00;--navy:#111d29;--bg:#f3f7fb;--muted:#64748b;--line:#e1e9f2;--green:#16a765;--red:#e94343;--amber:#f59e0b}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;color:#142236;background:var(--bg)}button,input,select{font:inherit}button{cursor:pointer;border:0;border-radius:7px;padding:9px 12px;font-weight:700}button:disabled{opacity:.6;cursor:not-allowed}button:focus,input:focus,select:focus{outline:2px solid #ffb273;outline-offset:1px}.orange{background:var(--orange);color:white}.soft{background:#fff;border:1px solid var(--line);color:#24364b}.danger{background:#ffe9e9;color:#c62828}.success{background:#dcf8e9;color:#087847}.warn{background:#fff1d8;color:#995800}.hidden{display:none!important}.muted{color:var(--muted)}small{font-size:12px}.login-screen{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;background:#132131}.hero{min-height:100vh;padding:50px 7%;display:flex;flex-direction:column;justify-content:center;color:white;background:linear-gradient(120deg,rgba(8,21,34,.15),rgba(8,21,34,.78)),url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1400&q=85') center/cover}.brand{font-size:26px;font-weight:800;display:flex;align-items:center;gap:12px}.brand-mark{display:inline-grid;place-items:center;background:var(--orange);width:48px;height:48px;border-radius:14px;color:white;font-size:27px}.hero h1{font-size:clamp(28px,4vw,44px);margin:32px 0 8px}.hero p{line-height:1.7;max-width:420px}.login-side{display:grid;place-items:center;padding:24px;background:#f7f9fc}.login-card{background:#fff;border:1px solid #e6edf5;border-radius:14px;padding:34px;width:min(100%,430px);box-shadow:0 18px 55px #091a2a22}.login-card h2{text-align:center;margin:0 0 8px;font-size:27px}.login-card>p{text-align:center;color:var(--muted);margin-bottom:28px}.field{display:block;margin:16px 0}.field span{display:block;font-size:13px;font-weight:700;margin-bottom:8px}.field input,.field select{width:100%;padding:12px;border:1px solid #d8e2ee;border-radius:7px;background:#fff}.login-card .orange{width:100%;margin-top:10px;padding:13px}.error{color:#c62828;font-size:13px;margin-top:10px}.app{min-height:100vh;display:grid;grid-template-columns:220px 1fr}.sidebar{background:linear-gradient(#142130,#101923);color:#d6e0eb;padding:20px 12px}.sidebar .brand{font-size:17px;padding:0 5px 24px}.sidebar .brand-mark{width:32px;height:32px;border-radius:9px;font-size:19px}.nav{display:grid;gap:7px}.nav button{background:transparent;color:#d2dce7;text-align:left;padding:12px;font-weight:600}.nav button.active,.nav button:hover{background:var(--orange);color:white}.main{min-width:0}.topbar{height:64px;background:white;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px}.topbar strong{font-size:14px}.content{padding:26px;max-width:1500px;margin:auto}.page-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:22px}.page-head h1{font-size:25px;margin:0 0 5px}.page-head p{margin:0;color:var(--muted);font-size:13px}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:20px}.stat,.panel{background:white;border:1px solid var(--line);border-radius:10px;box-shadow:0 2px 8px #162c4305}.stat{padding:18px;display:flex;gap:12px;align-items:center}.stat-icon{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#fff0e5;color:var(--orange);font-size:20px}.stat:nth-child(2) .stat-icon{background:#e6efff;color:#3b82f6}.stat:nth-child(3) .stat-icon{background:#dcf8e9;color:var(--green)}.stat:nth-child(4) .stat-icon{background:#ffe8e8;color:var(--red)}.stat label{font-size:12px;color:#53657c}.stat b{display:block;font-size:23px;margin-top:4px}.dashboard-grid{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(250px,1fr);gap:14px}.panel{padding:18px;margin-bottom:16px;min-width:0}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}.panel h3{font-size:16px;margin:0}.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:12px;white-space:nowrap}th{text-align:left;color:#45566d;background:#f7f9fc;font-weight:700}th,td{padding:12px 10px;border-bottom:1px solid #edf1f6}tbody tr:last-child td{border-bottom:0}.pill{display:inline-block;padding:5px 8px;border-radius:30px;font-size:11px;font-weight:700}.pill.active,.pill.approved{background:#d9f8e8;color:#087847}.pill.suspended,.pill.pending{background:#fff0d5;color:#9b5b00}.pill.banned,.pill.declined{background:#ffe2e2;color:#b42323}.actions{display:flex;gap:5px;flex-wrap:wrap}.actions button{padding:6px 8px;font-size:11px}.quick{display:flex;gap:12px;align-items:center;padding:15px 0;border-bottom:1px solid #edf1f6}.quick:last-child{border:0}.quick .stat-icon{flex-shrink:0}.quick b{display:block;font-size:13px}.quick small{display:block;color:var(--muted);margin-top:5px;line-height:1.4}.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.toolbar input,.toolbar select{padding:10px;border:1px solid var(--line);border-radius:7px;background:white}.toolbar input{min-width:190px}.settings-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.settings-grid .field input{margin-top:0}.notice{padding:12px;border-radius:7px;background:#fff7e9;color:#855000;font-size:12px;line-height:1.6;margin-bottom:16px}.footer-note{font-size:12px;color:var(--muted);text-align:center;padding:12px}.toast{position:fixed;bottom:24px;right:24px;background:#142236;color:white;padding:14px 18px;border-radius:9px;font-size:13px;font-weight:600;box-shadow:0 10px 30px #00000030;z-index:100;opacity:0;transform:translateY(12px);transition:.25s}.toast.show{opacity:1;transform:translateY(0)}.toast.ok{background:var(--green)}.toast.err{background:var(--red)}.modal-backdrop{position:fixed;inset:0;background:#0b1622aa;display:grid;place-items:center;padding:20px;z-index:50}.modal{background:white;border-radius:12px;padding:24px;width:min(100%,480px);box-shadow:0 25px 70px #00000040}.modal h3{margin:0 0 14px;font-size:18px}.modal .row{display:grid;gap:10px;margin-bottom:14px}.modal label{font-size:12px;font-weight:700;display:block;margin-bottom:5px}.modal input,.modal select{width:100%;padding:10px;border:1px solid #d8e2ee;border-radius:7px}.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}.link-cell{max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.link-cell a{color:#2563eb;text-decoration:none;font-weight:600}.link-cell a:hover{text-decoration:underline}.empty-link{color:#9aa7b8;font-style:italic}.loader{display:inline-block;width:14px;height:14px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite;vertical-align:-2px;margin-right:6px}@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:950px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.dashboard-grid{grid-template-columns:1fr}.app{grid-template-columns:175px 1fr}.content{padding:18px}.sidebar{padding:15px 8px}.settings-grid{grid-template-columns:1fr}}
+@media(max-width:650px){.login-screen{grid-template-columns:1fr}.hero{min-height:270px;padding:28px}.hero h1{margin-top:18px}.hero p{margin-bottom:0}.login-side{padding:20px}.login-card{padding:25px}.app{display:block}.sidebar{padding:10px;position:sticky;top:0;z-index:5}.sidebar .brand{padding:0 5px 10px}.nav{display:flex;overflow-x:auto}.nav button{white-space:nowrap;padding:9px 11px;font-size:12px}.topbar{height:52px;padding:0 15px}.content{padding:14px}.stats{gap:9px}.stat{padding:12px;gap:8px}.stat-icon{width:34px;height:34px;font-size:17px}.stat b{font-size:20px}.stat label{font-size:11px}.page-head{align-items:flex-start;flex-direction:column}.panel{padding:12px}.settings-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<section id="loginScreen" class="login-screen">
+  <div class="hero">
+    <div class="brand"><span class="brand-mark">A</span> Referral Links</div>
+    <h1>Admin Dashboard</h1>
+    <p>Manage accounts, review referral links, and keep the platform organized.</p>
+  </div>
+  <div class="login-side">
+    <form class="login-card" id="loginForm">
+      <h2>Admin Login</h2><p>Sign in with your admin account</p>
+      <label class="field"><span>Email Address</span><input id="loginEmail" type="email" autocomplete="username" required></label>
+      <label class="field"><span>Password</span><input id="loginPassword" type="password" autocomplete="current-password" required></label>
+      <button class="orange" type="submit" id="loginBtn">Login</button>
+      <div id="loginError" class="error" role="alert"></div>
+    </form>
+  </div>
+</section>
+
+<!-- APP -->
+<section id="app" class="app hidden">
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-mark">↗</span> Referral Links</div>
+    <nav class="nav">
+      <button class="active" data-page="dashboard">⌂ &nbsp; Dashboard</button>
+      <button data-page="accounts">♟ &nbsp; Accounts</button>
+      <button data-page="links">↗ &nbsp; Submitted Links</button>
+      <button data-page="settings">⚙ &nbsp; Settings</button>
+      <button id="logoutBtn">⇥ &nbsp; Logout</button>
+    </nav>
+  </aside>
+  <main class="main">
+    <header class="topbar"><span>☰ &nbsp; Admin workspace</span><strong>● &nbsp; <span id="adminEmailLabel">Admin</span> <span class="muted">▾</span></strong></header>
+    <div class="content">
+
+      <!-- DASHBOARD -->
+      <section id="page-dashboard" class="page">
+        <div class="page-head"><div><h1>Dashboard</h1><p>Overview of platform activity</p></div><span class="pill active">Live</span></div>
+        <div class="stats">
+          <div class="stat"><span class="stat-icon">♟</span><div><label>Total Accounts</label><b id="totalAccounts">0</b><small class="muted">Registered users</small></div></div>
+          <div class="stat"><span class="stat-icon">↗</span><div><label>Links Submitted</label><b id="totalLinks">0</b><small class="muted">All submissions</small></div></div>
+          <div class="stat"><span class="stat-icon">✓</span><div><label>Approved Links</label><b id="approvedLinks">0</b><small class="muted">Approved for display</small></div></div>
+          <div class="stat"><span class="stat-icon">×</span><div><label>Pending Links</label><b id="pendingLinks">0</b><small class="muted">Needs review</small></div></div>
+        </div>
+        <div class="dashboard-grid">
+          <div class="panel"><div class="panel-head"><h3>Recent Accounts</h3><button class="soft" data-goto="accounts">View all</button></div><div class="table-wrap"><table><thead><tr><th>Username</th><th>Email</th><th>Status</th><th>Joined</th></tr></thead><tbody id="recentAccounts"></tbody></table></div></div>
+          <div class="panel"><div class="panel-head"><h3>Quick Actions</h3></div>
+            <div class="quick"><span class="stat-icon">♟</span><div><b>Manage Accounts</b><small>Add, suspend, ban, or delete user accounts</small><button class="soft" data-goto="accounts" style="margin-top:8px">Open accounts →</button></div></div>
+            <div class="quick"><span class="stat-icon">↗</span><div><b>Review Submitted Links</b><small>Approve or decline referral links</small><button class="soft" data-goto="links" style="margin-top:8px">Review links →</button></div></div>
+            <div class="quick"><span class="stat-icon">⚙</span><div><b>Admin Details</b><small>Update your email and password</small><button class="soft" data-goto="settings" style="margin-top:8px">Open settings →</button></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACCOUNTS -->
+      <section id="page-accounts" class="page hidden">
+        <div class="page-head"><div><h1>Manage Accounts</h1><p>View and control user accounts</p></div><button class="orange" id="addAccountBtn">+ Add Account</button></div>
+        <div class="panel"><div class="panel-head"><h3>All Accounts</h3><div class="toolbar"><input id="accountSearch" placeholder="Search username or email…"><select id="accountStatusFilter"><option value="All">All statuses</option><option>Active</option><option>Suspended</option><option>Banned</option></select></div></div><div class="table-wrap"><table><thead><tr><th>Username</th><th>Email</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead><tbody id="accountsBody"></tbody></table></div></div>
+      </section>
+
+      <!-- LINKS -->
+      <section id="page-links" class="page hidden">
+        <div class="page-head"><div><h1>Submitted Links</h1><p>Review and approve or decline referral links</p></div><button class="orange" id="addLinkBtn">+ Add Link</button></div>
+        <div class="panel"><div class="panel-head"><h3>Link Submissions</h3><div class="toolbar"><input id="linkSearch" placeholder="Search user, title, program or URL…"><select id="linkFilter"><option value="All">All statuses</option><option>Pending</option><option>Approved</option><option>Declined</option></select></div></div><div class="table-wrap"><table><thead><tr><th>User</th><th>Link Title</th><th>Program</th><th>Submitted Link</th><th>Status</th><th>Submitted</th><th>Actions</th></tr></thead><tbody id="linksBody"></tbody></table></div></div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section id="page-settings" class="page hidden">
+        <div class="page-head"><div><h1>Admin Settings</h1><p>Update your login details</p></div></div>
+        <div class="notice">These changes go through Supabase Auth. After changing your email, Supabase will send a confirmation link — click it before the new email becomes active.</div>
+        <div class="settings-grid">
+          <form class="panel" id="emailForm"><h3>✉ &nbsp; Change Email</h3><label class="field"><span>Current Email</span><input id="currentEmail" readonly></label><label class="field"><span>New Email Address</span><input id="newEmail" type="email" required placeholder="Enter new email"></label><button class="orange" type="submit" id="emailBtn">Update Email</button><p id="emailMsg" class="muted"></p></form>
+          <form class="panel" id="passwordForm"><h3>♙ &nbsp; Change Password</h3><label class="field"><span>Current Password</span><input id="currentPassword" type="password" required></label><label class="field"><span>New Password</span><input id="newPassword" type="password" minlength="6" required></label><label class="field"><span>Confirm New Password</span><input id="confirmPassword" type="password" minlength="6" required></label><button class="orange" type="submit" id="passwordBtn">Update Password</button><p id="passwordMsg" class="muted"></p></form>
+        </div>
+      </section>
+
+      <div class="footer-note">Referral Links Admin • Powered by Supabase</div>
+    </div>
+  </main>
+</section>
+
+<div id="toast" class="toast"></div>
+
+<!-- Account Modal -->
+<div id="accountModal" class="modal-backdrop hidden">
+  <div class="modal">
+    <h3 id="accountModalTitle">Add Account</h3>
+    <div class="row"><div><label>Username</label><input id="acctUsername" placeholder="e.g. jane_doe"></div></div>
+    <div class="row"><div><label>Email</label><input id="acctEmail" type="email" placeholder="e.g. jane@example.com"></div></div>
+    <div class="row"><div><label>Status</label><select id="acctStatus"><option>Active</option><option>Suspended</option><option>Banned</option></select></div></div>
+    <div class="modal-actions"><button class="soft" data-close="accountModal">Cancel</button><button class="orange" id="saveAccountBtn">Save Account</button></div>
+  </div>
+</div>
+
+<!-- Link Modal -->
+<div id="linkModal" class="modal-backdrop hidden">
+  <div class="modal">
+    <h3 id="linkModalTitle">Add Link</h3>
+    <div class="row"><div><label>User</label><select id="linkUser"></select></div></div>
+    <div class="row"><div><label>Link Title</label><input id="linkTitle" placeholder="e.g. Get 100% Bonus"></div></div>
+    <div class="row"><div><label>Program</label><input id="linkProgram" placeholder="e.g. Betika"></div></div>
+    <div class="row"><div><label>Submitted Link URL</label><input id="linkUrl" type="url" placeholder="https://example.com/ref/abc123"></div></div>
+    <div class="row"><div><label>Status</label><select id="linkStatus"><option>Pending</option><option>Approved</option><option>Declined</option></select></div></div>
+    <div class="modal-actions"><button class="soft" data-close="linkModal">Cancel</button><button class="orange" id="saveLinkBtn">Save Link</button></div>
+  </div>
+</div>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const SUPABASE_URL      = 'https://xjurhkyheyuqjfidqsxj.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqdXJoa3loZXl1cWpmaWRxc3hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzMTEyOTIsImV4cCI6MjEwNzg4NzI5Mn0.8l8OEqN9SCq0shZhk1IWEyoPmwJGQRIMYCQPhXmof6g';
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const $   = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+const fmtDate = iso => {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  const pad = n => String(n).padStart(2,'0');
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+};
+
+const pill = s => `<span class="pill ${String(s).toLowerCase()}">${esc(s)}</span>`;
+const safeUrl = u => /^https?:\/\//i.test(u) ? u : 'https://' + u;
+
+function linkCell(url){
+  if(!url) return '<span class="empty-link">— no URL —</span>';
+  const href = safeUrl(url);
+  return `<span class="link-cell"><a href="${esc(href)}" target="_blank" rel="noopener noreferrer" title="${esc(url)}">${esc(url)}</a></span>`;
+}
+
+let toastTimer;
+function toast(msg, type='ok'){
+  const t = $('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+async function withBtn(btn, fn){
+  const html = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = `<span class="loader"></span>${html}`;
+  try { return await fn(); }
+  finally { btn.disabled = false; btn.innerHTML = html; }
+}
+
+let accounts = [];
+let links    = [];
+let editingAccountId = null;
+let editingLinkId    = null;
+let currentUserId    = null;
+
+async function loadAll(){
+  const [a, l] = await Promise.all([
+    supabase.from('accounts').select('*').order('joined_at', { ascending:false }),
+    supabase.from('links').select('*').order('submitted_at', { ascending:false })
+  ]);
+  if (a.error) {
+    console.error('Accounts query error:', a.error);
+    toast('Failed to load accounts: '+a.error.message, 'err');
+  }
+  if (l.error) {
+    console.error('Links query error:', l.error);
+    toast('Failed to load links: '+l.error.message, 'err');
+  }
+  accounts = a.data || [];
+  links    = l.data || [];
+  console.log('Loaded accounts:', accounts.length, 'Loaded links:', links.length);
+}
+
+async function createAccount({ username, email, status }){
+  const { data, error } = await supabase.from('accounts').insert({ username, email: email.toLowerCase().trim(), status }).select().single();
+  if (error) throw error;
+  return data;
+}
+
+async function updateAccount(id, patch){
+  const { data, error } = await supabase.from('accounts').update(patch).eq('id', id).select().single();
+  if (error) throw error;
+  return data;
+}
+
+async function deleteAccount(id){
+  const { error } = await supabase.from('accounts').delete().eq('id', id);
+  if (error) throw error;
+}
+
+async function createLink(payload){
+  const { data, error } = await supabase.from('links').insert(payload).select().single();
+  if (error) throw error;
+  return data;
+}
+
+async function updateLink(id, patch){
+  const { data, error } = await supabase.from('links').update(patch).eq('id', id).select().single();
+  if (error) throw error;
+  return data;
+}
+
+async function deleteLink(id){
+  const { error } = await supabase.from('links').delete().eq('id', id);
+  if (error) throw error;
+}
+
+function showPage(page){
+  document.querySelectorAll('.page').forEach(el => el.classList.toggle('hidden', el.id !== 'page-'+page));
+  document.querySelectorAll('[data-page]').forEach(el => el.classList.toggle('active', el.dataset.page === page));
+
+  if (page === 'accounts') renderAccounts();
+  if (page === 'links')    renderLinks();
+  if (page === 'dashboard')renderDashboard();
+  if (page === 'settings') $('currentEmail').value = $('adminEmailLabel').textContent;
+}
+
+function renderDashboard(){
+  $('totalAccounts').textContent = accounts.length;
+  $('totalLinks').textContent    = links.length;
+  $('approvedLinks').textContent = links.filter(x => x.status === 'Approved').length;
+  $('pendingLinks').textContent  = links.filter(x => x.status === 'Pending').length;
+
+  $('recentAccounts').innerHTML = accounts.slice(0,5).map(a => `
+    <tr><td>${esc(a.username)}</td><td>${esc(a.email)}</td><td>${pill(a.status)}</td><td>${fmtDate(a.joined_at)}</td></tr>
+  `).join('') || '<tr><td colspan="4" class="muted">No accounts yet.</td></tr>';
+}
+
+function renderAccounts(){
+  const q      = ($('accountSearch').value || '').toLowerCase();
+  const status = $('accountStatusFilter').value;
+  const filtered = accounts.filter(a => {
+    const matchesQ = (a.username + ' ' + a.email).toLowerCase().includes(q);
+    const matchesS = status === 'All' || a.status === status;
+    return matchesQ && matchesS;
+  });
+
+  $('accountsBody').innerHTML = filtered.map(a => `
+    <tr>
+      <td>${esc(a.username)}</td><td>${esc(a.email)}</td><td>${pill(a.status)}</td><td>${fmtDate(a.joined_at)}</td>
+      <td><div class="actions">
+        <button class="soft"  data-account="${a.id}" data-action="edit">Edit</button>
+        <button class="warn"  data-account="${a.id}" data-action="suspend">${a.status==='Suspended'?'Restore':'Suspend'}</button>
+        <button class="danger" data-account="${a.id}" data-action="ban">${a.status==='Banned'?'Unban':'Ban'}</button>
+        <button class="danger" data-account="${a.id}" data-action="delete">Delete</button>
+      </div></td>
+    </tr>`).join('') || '<tr><td colspan="5" class="muted">No matching accounts.</td></tr>';
+}
+
+function renderLinks(){
+  const filter = $('linkFilter').value;
+  const q      = ($('linkSearch').value || '').toLowerCase();
+
+  const filtered = links.filter(l => {
+    const matchesS = filter === 'All' || l.status === filter;
+    const matchesQ = (l.username+' '+(l.title||'')+' '+(l.program||'')+' '+(l.url||'')).toLowerCase().includes(q);
+    return matchesS && matchesQ;
+  });
+
+  $('linksBody').innerHTML = filtered.map(l => `
+    <tr>
+      <td>${esc(l.username || '—')}</td>
+      <td>${esc(l.title || '—')}</td>
+      <td>${esc(l.program || '—')}</td>
+      <td>${linkCell(l.url)}</td>
+      <td>${pill(l.status || 'Pending')}</td>
+      <td>${fmtDate(l.submitted_at)}</td>
+      <td><div class="actions">
+        <button class="success" data-link="${l.id}" data-action="approve">Approve</button>
+        <button class="danger"  data-link="${l.id}" data-action="decline">Decline</button>
+        <button class="soft"    data-link="${l.id}" data-action="editLink">Edit</button>
+        <button class="danger"  data-link="${l.id}" data-action="deleteLink">Delete</button>
+      </div></td>
+    </tr>`).join('') || '<tr><td colspan="7" class="muted">No links match your filters.</td></tr>';
+}
+
+async function isCurrentUserAdmin(){
+  if (!currentUserId) return false;
+  const { data, error } = await supabase.from('admins').select('user_id').eq('user_id', currentUserId).maybeSingle();
+  if (error) { console.error('Admin check error:', error); return false; }
+  return !!data;
+}
+
+async function enterApp(user){
+  currentUserId = user.id;
+  $('adminEmailLabel').textContent = user.email;
+  $('loginScreen').classList.add('hidden');
+  $('app').classList.remove('hidden');
+  $('loginPassword').value = '';
+  await loadAll();
+  showPage('dashboard');
+}
+
+$('loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = $('loginBtn');
+  $('loginError').textContent = '';
+
+  await withBtn(btn, async () => {
+    const email    = $('loginEmail').value.trim().toLowerCase();
+    const password = $('loginPassword').value;
+
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) { $('loginError').textContent = error.message; return; }
+
+    currentUserId = data.user.id;
+    if (!(await isCurrentUserAdmin())) {
+      await supabase.auth.signOut();
+      currentUserId = null;
+      $('loginError').textContent = 'This account is not an admin.';
+      return;
+    }
+    await enterApp(data.user);
+    toast('Welcome back, admin!');
+  });
+});
+
+$('logoutBtn').addEventListener('click', async () => {
+  await supabase.auth.signOut();
+  currentUserId = null;
+  $('app').classList.add('hidden');
+  $('loginScreen').classList.remove('hidden');
+  accounts = []; links = [];
+  showPage('dashboard');
+});
+
+(async () => {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session?.user) return;
+  currentUserId = session.user.id;
+  if (await isCurrentUserAdmin()) {
+    await enterApp(session.user);
+  } else {
+    await supabase.auth.signOut();
+  }
+})();
+
+document.querySelectorAll('[data-page]').forEach(b => b.addEventListener('click', () => showPage(b.dataset.page)));
+document.querySelectorAll('[data-goto]').forEach(b => b.addEventListener('click', () => showPage(b.dataset.goto)));
+$('accountSearch').addEventListener('input', renderAccounts);
+$('accountStatusFilter').addEventListener('change', renderAccounts);
+$('linkSearch').addEventListener('input', renderLinks);
+$('linkFilter').addEventListener('change', renderLinks);
+
+document.addEventListener('click', async e => {
+  const btn = e.target.closest('button[data-account],button[data-link]');
+  if (!btn) return;
+
+  if (btn.dataset.account){
+    const id  = btn.dataset.account;
+    const idx = accounts.findIndex(a => a.id === id);
+    if (idx < 0) return;
+    const acct   = accounts[idx];
+    const action = btn.dataset.action;
+
+    try {
+      if (action === 'delete'){
+        if (!confirm(`Delete account "${acct.username}"? Its links will also be removed.`)) return;
+        await withBtn(btn, () => deleteAccount(id));
+        accounts.splice(idx, 1);
+        links = links.filter(l => l.account_id !== id);
+        renderAccounts(); renderDashboard();
+        toast(`Account "${acct.username}" deleted`, 'err');
+      }
+      else if (action === 'suspend' || action === 'ban'){
+        const next = action === 'suspend' ? (acct.status === 'Suspended' ? 'Active' : 'Suspended') : (acct.status === 'Banned' ? 'Active' : 'Banned');
+        await withBtn(btn, () => updateAccount(id, { status: next }));
+        acct.status = next;
+        renderAccounts(); renderDashboard();
+        toast(`${acct.username} is now ${next}`, next==='Active'?'ok':'err');
+      }
+      else if (action === 'edit'){
+        editingAccountId = id;
+        $('accountModalTitle').textContent = 'Edit Account';
+        $('acctUsername').value = acct.username;
+        $('acctEmail').value    = acct.email;
+        $('acctStatus').value   = acct.status;
+        $('accountModal').classList.remove('hidden');
+      }
+    } catch (err) { toast(err.message || 'Action failed', 'err'); }
+    return;
+  }
+
+  const id  = btn.dataset.link;
+  const idx = links.findIndex(l => l.id === id);
+  if (idx < 0) return;
+  const link   = links[idx];
+  const action = btn.dataset.action;
+
+  try {
+    if (action === 'approve' || action === 'decline'){
+      const next = action === 'approve' ? 'Approved' : 'Declined';
+      await withBtn(btn, () => updateLink(id, { status: next }));
+      link.status = next;
+      renderLinks(); renderDashboard();
+      toast(`Link ${action==='approve'?'approved':'declined'}`, action==='approve'?'ok':'err');
+    }
+    else if (action === 'deleteLink'){
+      if (!confirm(`Delete link "${link.title}"?`)) return;
+      await withBtn(btn, () => deleteLink(id));
+      links.splice(idx, 1);
+      renderLinks(); renderDashboard();
+      toast(`Link "${link.title}" deleted`, 'err');
+    }
+    else if (action === 'editLink'){
+      editingLinkId = id;
+      fillUserSelect(link.username);
+      $('linkTitle').value   = link.title || '';
+      $('linkProgram').value = link.program || '';
+      $('linkUrl').value     = link.url || '';
+      $('linkStatus').value  = link.status || 'Pending';
+      $('linkModalTitle').textContent = 'Edit Link';
+      $('linkModal').classList.remove('hidden');
+    }
+  } catch (err) { toast(err.message || 'Action failed', 'err'); }
+});
+
+$('addAccountBtn').addEventListener('click', () => {
+  editingAccountId = null;
+  $('accountModalTitle').textContent = 'Add Account';
+  $('acctUsername').value = '';
+  $('acctEmail').value    = '';
+  $('acctStatus').value   = 'Active';
+  $('accountModal').classList.remove('hidden');
+});
+
+$('saveAccountBtn').addEventListener('click', async () => {
+  const username = $('acctUsername').value.trim();
+  const email    = $('acctEmail').value.trim().toLowerCase();
+  const status   = $('acctStatus').value;
+
+  if (!username || !email){ toast('Username and email are required', 'err'); return; }
+  if (!email.includes('@')) { toast('Enter a valid email', 'err'); return; }
+
+  const btn = $('saveAccountBtn');
+  try {
+    if (editingAccountId === null){
+      const created = await withBtn(btn, () => createAccount({ username, email, status }));
+      accounts.unshift(created);
+      toast(`Account "${username}" added`);
+    } else {
+      const updated = await withBtn(btn, () => updateAccount(editingAccountId, { username, email, status }));
+      accounts = accounts.map(a => a.id === editingAccountId ? updated : a);
+      toast(`Account "${username}" updated`);
+    }
+    $('accountModal').classList.add('hidden');
+    editingAccountId = null;
+    renderAccounts(); renderDashboard();
+  } catch (err) { toast(err.message || 'Save failed', 'err'); }
+});
+
+function fillUserSelect(selected){
+  $('linkUser').innerHTML = accounts.map(a => `<option value="${esc(a.username)}" ${a.username === selected ? 'selected' : ''}>${esc(a.username)}</option>`).join('');
+}
+
+$('addLinkBtn').addEventListener('click', () => {
+  editingLinkId = null;
+  fillUserSelect('');
+  $('linkTitle').value   = '';
+  $('linkProgram').value = '';
+  $('linkUrl').value     = '';
+  $('linkStatus').value  = 'Pending';
+  $('linkModalTitle').textContent = 'Add Link';
+  $('linkModal').classList.remove('hidden');
+});
+
+$('saveLinkBtn').addEventListener('click', async () => {
+  const username = $('linkUser').value;
+  const title    = $('linkTitle').value.trim();
+  const program  = $('linkProgram').value.trim();
+  const url      = $('linkUrl').value.trim();
+  const status   = $('linkStatus').value;
+
+  if (!username || !title || !program){ toast('User, title and program are required', 'err'); return; }
+  if (url && !/^https?:\/\//i.test(url)){ toast('URL must start with http:// or https://', 'err'); return; }
+
+  const account = accounts.find(a => a.username === username);
+  if (!account){ toast('Selected user no longer exists', 'err'); return; }
+
+  const payload = { username, account_id: account.id, title, program, url, status, email: account.email };
+  const btn = $('saveLinkBtn');
+  try {
+    if (editingLinkId === null){
+      const created = await withBtn(btn, () => createLink(payload));
+      links.unshift(created);
+      toast('Link added');
+    } else {
+      const updated = await withBtn(btn, () => updateLink(editingLinkId, payload));
+      links = links.map(l => l.id === editingLinkId ? updated : l);
+      toast('Link updated');
+    }
+    $('linkModal').classList.add('hidden');
+    editingLinkId = null;
+    renderLinks(); renderDashboard();
+  } catch (err) { toast(err.message || 'Save failed', 'err'); }
+});
+
+document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => $(b.dataset.close).classList.add('hidden')));
+document.querySelectorAll('.modal-backdrop').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.add('hidden'); }));
+
+$('emailForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const next = $('newEmail').value.trim().toLowerCase();
+  const msg  = $('emailMsg');
+  msg.textContent = '';
+  if (!next.includes('@')){ msg.textContent = 'Enter a valid email address.'; return; }
+
+  const btn = $('emailBtn');
+  await withBtn(btn, async () => {
+    const { error } = await supabase.auth.updateUser({ email: next });
+    if (error){ msg.textContent = error.message; return; }
+    msg.textContent = 'Confirmation sent. Check your inbox at the new address (and possibly the old one) to confirm the change.';
+    $('newEmail').value = '';
+    toast('Confirmation email sent');
+  });
+});
+
+$('passwordForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const current = $('currentPassword').value;
+  const next    = $('newPassword').value;
+  const confirm = $('confirmPassword').value;
+  const msg     = $('passwordMsg');
+  msg.textContent = '';
+
+  if (next !== confirm){ msg.textContent = 'New passwords do not match.'; return; }
+  if (next.length < 6) { msg.textContent = 'Password must be at least 6 characters.'; return; }
+
+  const email = $('adminEmailLabel').textContent.toLowerCase();
+  const btn   = $('passwordBtn');
+
+  await withBtn(btn, async () => {
+    const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password: current });
+    if (signInErr){ msg.textContent = 'Current password is incorrect.'; return; }
+
+    const { error } = await supabase.auth.updateUser({ password: next });
+    if (error){ msg.textContent = error.message; return; }
+
+    msg.textContent = 'Password updated successfully.';
+    $('currentPassword').value = '';
+    $('newPassword').value     = '';
+    $('confirmPassword').value = '';
+    toast('Admin password updated');
+  });
+});
+
+renderDashboard();
+</script>
+</body>
+</html>
